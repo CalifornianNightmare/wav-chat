@@ -1,0 +1,20 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11435:11434"
+    volumes:
+      - ./docker/ollama_files:/root/.ollama
+      - ./ollama_entrypoint.sh:/ollama_entrypoint.sh
+    environment:
+      - LLM_MODEL_VERSION=${LLM_MODEL_VERSION} 
+    entrypoint: ["/bin/bash", "/ollama_entrypoint.sh"] 
+
+  app:
+    build: .
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11435
+    # volumes:
+      # - ./docker/cache_whisper:~/.cache/whisper

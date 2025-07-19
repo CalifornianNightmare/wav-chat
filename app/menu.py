@@ -2,15 +2,14 @@ from app.pipe import pipeline
 
 from pathlib import Path
 from clear_screen import clear
-from simple_term_menu import TerminalMenu
+from consolemenu import SelectionMenu
 
 
 def main_menu():
-    clear()
-
     options = ["Select a WAV", "Clean WAV noise", "About", "Exit"]
-    terminal_menu = TerminalMenu(options)
-    menu_entry_index = terminal_menu.show()
+
+    menu_entry_index = SelectionMenu.get_selection(options)
+
     if menu_entry_index == 0:
         WAVselect()
     if menu_entry_index == 1:
@@ -24,8 +23,7 @@ def main_menu():
 def WAVselect():
     filelist = [name for name in Path("files").glob("*.wav")]
     options = [filename.stem + ".wav" for filename in filelist]
-    terminal_menu = TerminalMenu(options, title=f"Found {len(filelist)} files. Choose:")
-    menu_entry_index = terminal_menu.show()
+    menu_entry_index = SelectionMenu.get_selection(options, f"Found {len(filelist)} files. Choose:")
 
     filename = options[menu_entry_index]
 
@@ -35,8 +33,9 @@ def WAVselect():
 
 def continue_question(text: str):
     options = ["Yes", "No"]
-    terminal_menu = TerminalMenu(options, title=text + "\n\nContinue?")
-    menu_entry_index = terminal_menu.show()
+
+    menu_entry_index = SelectionMenu.get_selection(options, text + "\n\nContinue?")
+    
     if menu_entry_index == 0:
         main_menu()
     if menu_entry_index == 1:
@@ -57,7 +56,6 @@ def about():
     )
 
     options = ["Okay"]
-    terminal_menu = TerminalMenu(options, title=title)
-    terminal_menu.show()
+    menu_entry_index = SelectionMenu.get_selection(options, title)
 
     main_menu()

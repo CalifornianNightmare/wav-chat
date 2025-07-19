@@ -1,0 +1,3 @@
+update volume to app asr
+noise cancellation
+revise readme

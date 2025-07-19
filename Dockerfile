@@ -5,11 +5,14 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN curl -fsSL https://ollama.com/install.sh | sh
-RUN ollama pull llama3.2:1b
+RUN apt update
+RUN apt install ffmpeg --yes
 
 COPY . .
 
 VOLUME ./files /usr/src/app/files
 
-ENTRYPOINT ["/bin/bash", "-c", "python ./app.py"]
+ENV TERM=xterm-256color
+
+SHELL ["/bin/bash", "-c"]
+RUN python ./app.py
