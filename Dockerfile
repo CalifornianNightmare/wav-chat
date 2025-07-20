@@ -11,8 +11,5 @@ RUN apt install ffmpeg --yes
 COPY . .
 
 VOLUME ./files /usr/src/app/files
-wwww
-ENV TERM=xterm-256color
 
-SHELL ["/bin/bash", "-c"]
-RUN python ./app.py
+CMD ["python", "./app.py"]
