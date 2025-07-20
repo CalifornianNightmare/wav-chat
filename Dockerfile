@@ -10,6 +10,4 @@ RUN apt install ffmpeg --yes
 
 COPY . .
 
-VOLUME ./files /usr/src/app/files
-
 CMD ["python", "./app.py"]

@@ -7,7 +7,7 @@ services:
     environment:
       - LLM_MODEL_VERSION=${LLM_MODEL_VERSION} 
     entrypoint: ["/bin/bash", "/ollama_entrypoint.sh"] 
-
+  
   app:
     build: .
     depends_on:
@@ -15,6 +15,6 @@ services:
     environment:
       - OLLAMA_HOST=http://ollama:11434
     volumes:
-      - ./docker/cache_whisper:/home/.cache/whisper
+      - ./docker/files:/usr/src/app/files
     stdin_open: true
     tty: true
