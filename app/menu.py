@@ -46,16 +46,12 @@ def WAVselect():
     try:
         menu_entry_index_i = int(menu_entry_index)
     except ValueError:
-        clear()
-        print("Not a number. Please retry:\n")
-        return
+        return 'Not a number.'
     
     try:
         filename = options[menu_entry_index_i]
     except IndexError:
-        clear()
-        print("Not an option. Please retry:\n")
-        return
+        return 'Not an option.'
 
     output_path = pipeline(f"files/{filename}")
     return f"Response file saved at: {output_path}."
@@ -93,19 +89,15 @@ def noise_cancel():
     try:
         menu_entry_index_i = int(menu_entry_index)
     except ValueError:
-        clear()
-        print("Not a number. Please retry:\n")
-        return
+        return 'Not a number.'
     
     try:
         filename = options[menu_entry_index_i]
     except IndexError:
-        clear()
-        print("Not an option. Please retry:\n")
-        return
+        return 'Not an option.'
 
     reduce_file_noise(f"files/{filename}")
-    return f"{filename} denoised succesfully. Continue?"
+    return f"{filename} denoised succesfully"
 
 def about():
     title = (
