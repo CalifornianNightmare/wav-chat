@@ -1,5 +1,7 @@
 from app.pipe import pipeline
 
+from app.denoise.denoise import reduce_file_noise
+
 from pathlib import Path
 from clear_screen import clear
 from consolemenu import SelectionMenu
@@ -43,9 +45,14 @@ def continue_question(text: str):
 
 
 def noise_cancel():
-    main_menu()
-    # Не сейчас
+    filelist = [name for name in Path("files").glob("*.wav")]
+    options = [filename.stem + ".wav" for filename in filelist]
+    menu_entry_index = SelectionMenu.get_selection(options, f"Found {len(filelist)} files. Choose:")
 
+    filename = options[menu_entry_index]
+
+    reduce_file_noise(f"files/{filename}")
+    continue_question(f"{filename} denoised succesfully. Continue?")
 
 def about():
     title = (
