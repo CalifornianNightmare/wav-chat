@@ -1,68 +1,123 @@
 from app.pipe import pipeline
-
 from app.denoise.denoise import reduce_file_noise
 
 from pathlib import Path
 from clear_screen import clear
-from consolemenu import SelectionMenu
 
 
 def main_menu():
     options = ["Select a WAV", "Clean WAV noise", "About", "Exit"]
 
-    menu_entry_index = SelectionMenu.get_selection(options)
+    clear()
+    print("Select an option:\n")
 
-    if menu_entry_index == 0:
-        WAVselect()
-    if menu_entry_index == 1:
-        noise_cancel()
-    if menu_entry_index == 2:
-        about()
-    if menu_entry_index == 3:
-        print("Goodbye")
+    goodbye = False
+
+    while not goodbye:
+
+        [print(f"{n}: {options[n]}") for n in range(len(options))]
+        menu_entry_index = input("\n-> ")
+
+        if menu_entry_index == "0":
+            goodbye = continue_question(WAVselect())
+        elif menu_entry_index == "1":
+            goodbye = continue_question(noise_cancel())
+        elif menu_entry_index == "2":
+            about()
+        elif menu_entry_index == "3":
+            clear()
+            print("Goodbye")
+            goodbye = True
+        else:
+            clear()
+            print("Incorect option. Please select:\n")
 
 
 def WAVselect():
     filelist = [name for name in Path("files").glob("*.wav")]
     options = [filename.stem + ".wav" for filename in filelist]
-    menu_entry_index = SelectionMenu.get_selection(options, f"Found {len(filelist)} files. Choose:")
+    
+    clear()
+    print(f"Found {len(filelist)} files. Choose:\n")
 
-    filename = options[menu_entry_index]
+    [print(f"{n}: {options[n]}") for n in range(len(options))]
+    menu_entry_index = input("\n-> ")
+
+    try:
+        menu_entry_index_i = int(menu_entry_index)
+    except ValueError:
+        clear()
+        print("Not a number. Please retry:\n")
+        return
+    
+    try:
+        filename = options[menu_entry_index_i]
+    except IndexError:
+        clear()
+        print("Not an option. Please retry:\n")
+        return
 
     output_path = pipeline(f"files/{filename}")
-    continue_question(f"Response file saved at: {output_path}.")
+    return f"Response file saved at: {output_path}."
 
 
 def continue_question(text: str):
     options = ["Yes", "No"]
 
-    menu_entry_index = SelectionMenu.get_selection(options, text + "\n\nContinue?")
+    clear()
+    print(text + "\n\nContinue?\n")
+
+    [print(f"{n}: {options[n]}") for n in range(len(options))]
+
+    menu_entry_index = input("\n-> ")
+    clear()
     
-    if menu_entry_index == 0:
-        main_menu()
-    if menu_entry_index == 1:
+    if menu_entry_index == "1":
         print("Goodbye")
+        return True
+    else:
+        print("Select an option:\n")
+        return False
 
 
 def noise_cancel():
     filelist = [name for name in Path("files").glob("*.wav")]
     options = [filename.stem + ".wav" for filename in filelist]
-    menu_entry_index = SelectionMenu.get_selection(options, f"Found {len(filelist)} files. Choose:")
+    
+    clear()
+    print(f"Found {len(filelist)} files. Choose:\n")
 
-    filename = options[menu_entry_index]
+    [print(f"{n}: {options[n]}") for n in range(len(options))]
+    menu_entry_index = input("\n-> ")
+
+    try:
+        menu_entry_index_i = int(menu_entry_index)
+    except ValueError:
+        clear()
+        print("Not a number. Please retry:\n")
+        return
+    
+    try:
+        filename = options[menu_entry_index_i]
+    except IndexError:
+        clear()
+        print("Not an option. Please retry:\n")
+        return
 
     reduce_file_noise(f"files/{filename}")
-    continue_question(f"{filename} denoised succesfully. Continue?")
+    return f"{filename} denoised succesfully. Continue?"
 
 def about():
     title = (
         "This app will listen to the input audio file and generate an output answer\n"
         "You also have the option to reduce noise on audio and save\n"
         "WAV files are taken out of /files/ folder\n"
-        "Installation steps are described in README.md\n"
+        "Installation steps are described in README.md\n\n"
+        "any: Okay"
     )
 
-    options = ["Okay"]
-    menu_entry_index = SelectionMenu.get_selection(options, title)
-
-    main_menu()
+    clear()
+    print(title)
+    input("\n-> ")
+    clear()
+    print("Select an option:\n")
