@@ -10,6 +10,7 @@ services:
   
   app:
     build: .
+    container_name: wav-chat
     depends_on:
       - ollama
     environment:
