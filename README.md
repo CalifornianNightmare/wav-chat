@@ -5,8 +5,10 @@
 + [Getting Started](#getting_started)
 + [Usage](#usage)
 + [Additional Info](#additional_info)
++ [Additional Info](#additional_info)
 
 ## About <a name = "about"></a>
+ML project combining ASR with LLM to create audio chatting experience, all completely local
 ML project combining ASR with LLM to create audio chatting experience, all completely local
 
 ## Getting Started <a name = "getting_started"></a>
@@ -17,6 +19,7 @@ These instructions will get you a copy of the project up and running on your loc
 - Python 3.12.3
 - Pip
 - Ollama
+- ~10GB of free space
 - ~10GB of free space
 
 ### Installing
@@ -54,6 +57,7 @@ pip install --no-cache-dir -r requirements.txt
 ```
 
 Install the ollama model that will be used (`Llama3.2:1b` by default, but configurable in `.env`)
+Install the ollama model that will be used (`Llama3.2:1b` by default, but configurable in `.env`)
 
 ```sh
 ollama pull llama3.2:1b
@@ -85,22 +89,49 @@ docker compose build
 ```
 
 Run docker compose
+### Runing in Docker <a name = "deployment"></a>
+
+Open `.env`, and uncomment the `OLLAMA_HOST` variable to connect to ollama, rather than localhost. 
+
+In the end, it should look like this:
 
 ```sh
+### Local ollama connection
+# OLLAMA_HOST='http://localhost:11434'
+### Docker ollama connection
+OLLAMA_HOST='http://ollama:11434'
+```
+
+Build the images
+
+```sh
+docker compose build
+```
+
+Run docker compose
+
+```sh
+docker compose up -d
 docker compose up -d
 ```
 
 Attach the terminal interface
+Attach the terminal interface
 
 ```sh
+docker attach wav-chat
 docker attach wav-chat
 ```
 
 Run app container in bash (For debugging purposes)
+Run app container in bash (For debugging purposes)
 
 ```sh
 docker exec -it wav-chat /bin/bash
+docker exec -it wav-chat /bin/bash
 ```
+
+To exchange `.wav` files with the container, use the newly generated `/wav-chat/docker/files` folder
 
 To exchange `.wav` files with the container, use the newly generated `/wav-chat/docker/files` folder
 
@@ -115,6 +146,9 @@ The files are read from and saved to the `/files/` folder. Only `.wav` types are
 
 > ### Clean WAV noise
 
+Selects a WAV file and uses noise cancellation. Saves back by the same name
+
+The files are read from and saved to the `/files/` folder. Only `.wav` types are allowed
 Selects a WAV file and uses noise cancellation. Saves back by the same name
 
 The files are read from and saved to the `/files/` folder. Only `.wav` types are allowed
